@@ -1,8 +1,8 @@
 {
   "play": "PLAY",
   "betType": {
-    "rock": "ROCK",
-    "paper": "PAPER",
-    "scissor": "SCISSOR"
+    "rock": "Rock 🪨",
+    "paper": "Paper 📄",
+    "scissor": "Scissor ✂️"
   }
 }
