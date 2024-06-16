@@ -4,6 +4,7 @@
   "win": "WIN",
   "play": "PLAY",
   "placeYourBets": "Place your bets",
+  "pickYourPositions": "Pick your positions",
   "betType": {
     "rock": "Rock 🪨",
     "paper": "Paper 📄",
