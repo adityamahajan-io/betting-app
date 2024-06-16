@@ -26,3 +26,5 @@ export const BET_CHOICES = [
 
 export const BET_AMOUNT: number = 500;
 export const STARTING_BALANCE: number = 5000;
+export const MAX_BETTING_POSITIONS = 2;
+export const INITIAL_BET_AMOUNT = 0;

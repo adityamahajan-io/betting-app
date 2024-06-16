@@ -1,5 +1,9 @@
 {
+  "balance": "BALANCE",
+  "bet": "BET",
+  "win": "WIN",
   "play": "PLAY",
+  "placeYourBets": "Place your bets",
   "betType": {
     "rock": "Rock 🪨",
     "paper": "Paper 📄",
