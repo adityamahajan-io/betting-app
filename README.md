@@ -1,8 +1,6 @@
 # Betting Game Assignment
 
-This is my submission for the betting game assignment, created using React and TypeScript
-
-You can find the game deployed at: https://betting-game-rock-paper-scissor.netlify.app/
+Live deployment: https://betting-game-rock-paper-scissor.netlify.app/
 
 ## Architecture Features
 
