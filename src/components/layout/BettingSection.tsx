@@ -1,39 +1,28 @@
 import React, { useState } from "react";
-import BetCard from "../BetCard";
+
 import PlayButton from "../PlayButton";
-import { useTranslation } from "react-i18next";
-import { BET_CHOICES } from "../../constants";
+import { GAME_STATES } from "../../constants";
 import { useGameStore } from "../../store";
+import BettingChoices from "./BettingChoices";
+import GamePlaySection from "./GamePlaySection";
 
 type Props = {};
 
 const BettingSection = (props: Props) => {
-  const { t } = useTranslation();
-  const { bets, computerBet } = useGameStore();
-
-  const playerBets = Object.keys(bets);
+  const [showGameResult, setShowGameResult] = useState(false);
+  const { gameState } = useGameStore();
 
   return (
-    <div className="flex-grow flex flex-col items-center justify-center bg-gray-700">
-      <div className="text-yellow-600 font-bold uppercase mb-4">
-        {computerBet && (
-          <div>
-            {computerBet} vs {playerBets.join(" & ")}
-          </div>
-        )}
+    <div className="flex-grow flex flex-col items-center justify-center">
+      <div className="h-1/3 w-full flex flex-col justify-end pb-4">
+        <GamePlaySection {...{ setShowGameResult, showGameResult }} />
       </div>
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        {BET_CHOICES.map((choice) => (
-          <BetCard
-            id={choice.id}
-            title={choice.title()}
-            fillColor={choice.fillColor}
-            borderColor={choice.borderColor}
-            textColor={choice.textColor}
-          />
-        ))}
+      <div className="h-1/3 w-full max-w-lg flex flex-col items-center justify-center">
+        <BettingChoices disableClicks={gameState !== GAME_STATES.BeforeStart} />
       </div>
-      <PlayButton />
+      <div className="h-1/3">
+        <PlayButton {...{ setShowGameResult }} />
+      </div>
     </div>
   );
 };

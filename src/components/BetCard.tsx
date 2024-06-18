@@ -1,9 +1,10 @@
 import classNames from "classnames";
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { useGameStore } from "../store";
-import { MAX_BETTING_POSITIONS } from "../constants";
+import { GAME_STATES, MAX_BETTING_POSITIONS } from "../constants";
 import { ChevronUp, ChevronDown } from "react-feather";
 import { useTranslation } from "react-i18next";
+import { motion, AnimatePresence, useAnimate } from "framer-motion";
 
 type Props = {
   title: string;
@@ -11,16 +12,28 @@ type Props = {
   borderColor: string;
   textColor: string;
   id: string;
+  showToast: (arg: string) => void;
 };
 
-const BetCard = ({ title, fillColor, borderColor, textColor, id }: Props) => {
+const BetCard = ({
+  title,
+  fillColor,
+  borderColor,
+  textColor,
+  id,
+  showToast,
+}: Props) => {
+  const { placeBet, reduceBet, bets, balance, gameResult, gameState } =
+    useGameStore();
+
   const { t } = useTranslation();
-  const { placeBet, reduceBet, bets, balance } = useGameStore();
+
+  const [betAmount, animate] = useAnimate();
 
   const handlePlaceBet = () => {
     const positionsPicked = Object.keys(bets);
     if (balance <= 0) {
-      alert("Insufficient balance!");
+      showToast(t("insufficientBalance"));
       return;
     }
 
@@ -28,52 +41,99 @@ const BetCard = ({ title, fillColor, borderColor, textColor, id }: Props) => {
       positionsPicked.length >= MAX_BETTING_POSITIONS &&
       !positionsPicked.includes(id)
     ) {
-      alert("Too many!");
+      showToast(t("bettingPositionsLimitCrossed"));
       return;
     }
 
     placeBet(id);
+
+    if (bets[id]) {
+      animate(
+        betAmount.current,
+        {
+          y: [0, -5, 0],
+        },
+        { duration: 0.2, ease: "easeInOut" }
+      );
+    }
   };
 
-  // TODO: FIX THIS. CANNOT BE ANY
-  const handleReduceBet = (e: any) => {
+  const handleReduceBet = (e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
     reduceBet(id);
+
+    animate(
+      betAmount.current,
+      {
+        y: [0, 5, 0],
+      },
+      { duration: 0.2, ease: "easeInOut" }
+    );
   };
 
   return (
-    <div
-      className={classNames(
-        "border w-48 h-48 flex flex-col items-center p-4 rounded-lg cursor-pointer select-none",
-        fillColor,
-        borderColor
-      )}
-      onClick={() => handlePlaceBet()}
-    >
-      {bets[id] ? (
-        <div className="my-auto">
-          <div className="flex justify-center items-center gap-x-2">
-            {/* this circle needs to always be circle regardless of the number inside */}
-            <ChevronDown
-              onClick={handleReduceBet}
-              className={textColor}
-              size={26}
-            />
-            <div className="bg-white rounded-full p-4 border-blue-600 border-4">
-              {bets[id]}
-            </div>
-            <ChevronUp className={textColor} size={26} />
-          </div>
+    <>
+      <motion.div
+        className={classNames(
+          "border w-28 h-28 md:w-40 md:h-40 flex flex-col items-center p-1 md:p-2 rounded-lg cursor-pointer hover:drop-shadow-betCardGlow",
+          fillColor,
+          borderColor,
+          {
+            "border-4 drop-shadow-betCardGlow":
+              gameState === GAME_STATES.Completed &&
+              gameResult.successBet === id,
+          }
+        )}
+        onClick={handlePlaceBet}
+      >
+        <AnimatePresence>
+          {bets[id] && (
+            <motion.div
+              key={id}
+              className="my-auto"
+              initial={{ y: 10, opacity: 0, scale: 0.7 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{
+                y: 20,
+                opacity: 0,
+                scale: 0.7,
+                transition: { duration: 0.1 },
+              }}
+            >
+              <div
+                ref={betAmount}
+                className="flex justify-center items-center gap-x-1 md:gap-x-2"
+              >
+                {gameState === GAME_STATES.BeforeStart && (
+                  <ChevronDown
+                    onClick={handleReduceBet}
+                    className={classNames(textColor, "hover:text-white")}
+                    size={20}
+                  />
+                )}
+                <div className="bg-white rounded-full border-blue-600 border-4 w-12 h-12 md:w-16 md:h-16 flex justify-center text-[9px] items-center font-bold md:text-sm">
+                  {bets[id]}
+                </div>
+                {gameState === GAME_STATES.BeforeStart && (
+                  <ChevronUp
+                    className={classNames(textColor, "hover:text-white")}
+                    size={20}
+                  />
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div
+          className={classNames(
+            "text-xs md:text-lg mt-auto font-bold",
+            textColor
+          )}
+        >
+          {title}
         </div>
-      ) : (
-        <div className={classNames("font-bold", textColor)}>
-          {t("placeYourBets")}
-        </div>
-      )}
-      <div className={classNames("mt-auto uppercase font-bold", textColor)}>
-        {title}
-      </div>
-    </div>
+      </motion.div>
+    </>
   );
 };
 

@@ -1,26 +1,47 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useGameStore } from "../store";
+import { GAME_STATES, INITIAL_BET_AMOUNT } from "../constants";
 
-type Props = {};
+type Props = {
+  setShowGameResult: (arg: boolean) => void;
+};
 
-const PlayButton = (props: Props) => {
+const PlayButton = ({ setShowGameResult }: Props) => {
   const { t } = useTranslation();
-  const { initializeGame, playGame } = useGameStore();
+  const { initializeGame, resetBets, playGame, totalBetAmount, gameState } =
+    useGameStore();
 
   const handlePlayButtonClick = () => {
-    initializeGame();
+    if (gameState === GAME_STATES.BeforeStart) {
+      initializeGame();
+      setTimeout(playGame, 1500);
+    }
 
-    setTimeout(playGame, 1000);
+    if (gameState === GAME_STATES.Completed) {
+      resetBets();
+      setShowGameResult(false);
+      return;
+    }
   };
 
+  const isDisabled =
+    gameState === GAME_STATES.InProgress ||
+    totalBetAmount === INITIAL_BET_AMOUNT;
+
   return (
-    <div
-      className="border rounded-full px-4 py-1 cursor-pointer select-none"
+    <button
+      disabled={isDisabled}
+      className="border uppercase rounded-full cursor-pointer select-none bg-black text-yellow-600 border-yellow-600 font-bold text-xl px-12 py-4 disabled:opacity-30"
       onClick={handlePlayButtonClick}
     >
-      {t("play")}
-    </div>
+      {gameState === GAME_STATES.BeforeStart ||
+      gameState === GAME_STATES.InProgress ? (
+        <>{t("play")}</>
+      ) : (
+        <>{t("playAgain")}</>
+      )}
+    </button>
   );
 };
 

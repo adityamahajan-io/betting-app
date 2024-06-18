@@ -2,6 +2,9 @@ import { create } from "zustand";
 import {
   BET_AMOUNT,
   DOUBLE_BET_WIN_MULTIPLER,
+  GAME_CHOICES,
+  GAME_RESULTS,
+  GAME_STATES,
   INITIAL_BET_AMOUNT,
   SINGLE_BET_WIN_MULTIPLIER,
   STARTING_BALANCE,
@@ -18,8 +21,14 @@ interface GameState {
   reduceBet: (choice: string) => void;
   playGame: () => void;
   initializeGame: () => void;
-  computerBet: string | null;
-  // TODO: FIX TYPES FOR ALL
+  resetBets: () => void;
+  gameState: GAME_STATES;
+  gameResult: {
+    successBet: string | null;
+    outcome: GAME_RESULTS | null;
+  };
+  computerBet: GAME_CHOICES | null;
+  netGain: number;
   bets: Bet;
   totalBetAmount: number;
 }
@@ -27,8 +36,14 @@ interface GameState {
 export const useGameStore = create<GameState>((set) => ({
   balance: STARTING_BALANCE,
   bets: {} as Bet,
+  netGain: 0,
   computerBet: null,
   totalBetAmount: INITIAL_BET_AMOUNT,
+  gameState: GAME_STATES.BeforeStart,
+  gameResult: {
+    successBet: null,
+    outcome: null,
+  },
   placeBet: (betType) =>
     set((state) => ({
       balance: state.balance - BET_AMOUNT,
@@ -36,7 +51,7 @@ export const useGameStore = create<GameState>((set) => ({
         ...state.bets,
         [betType]: (state.bets[betType] || 0) + BET_AMOUNT,
       },
-      totalBetAmount: (state.totalBetAmount || 0) + BET_AMOUNT,
+      totalBetAmount: state.totalBetAmount + BET_AMOUNT,
     })),
   reduceBet: (betType) =>
     set((state) => {
@@ -56,38 +71,56 @@ export const useGameStore = create<GameState>((set) => ({
       };
     }),
   initializeGame: () =>
-    set((state) => {
+    set(() => {
       return {
+        gameState: GAME_STATES.InProgress,
         computerBet: getRandomPosition(),
       };
     }),
   playGame: () =>
     set((state) => {
-      const playerBets = Object.keys(state.bets);
+      const playerBets = Object.keys(state.bets) as GAME_CHOICES[];
 
-      const result: string = getBetResult(playerBets, state.computerBet);
+      const { result, successBet } = getBetResult(
+        playerBets,
+        state.computerBet
+      );
 
       let newBalance = state.balance;
+      let netGain = 0;
 
-      //   TODO: CONVERT TO SWITCH CASE
-      if (result === "win") {
+      if (result === GAME_RESULTS.Win) {
         if (playerBets.length === 1) {
           newBalance += state.totalBetAmount * SINGLE_BET_WIN_MULTIPLIER;
+          netGain = state.totalBetAmount * SINGLE_BET_WIN_MULTIPLIER;
         } else {
           newBalance += state.totalBetAmount * DOUBLE_BET_WIN_MULTIPLER;
+          netGain = state.totalBetAmount * DOUBLE_BET_WIN_MULTIPLER;
         }
       }
 
-      if (result === "draw") {
-        newBalance += state.totalBetAmount;
+      if (result === GAME_RESULTS.Draw) {
+        if (playerBets.length === 1) {
+          newBalance += state.totalBetAmount;
+          netGain = state.totalBetAmount;
+        }
       }
 
       return {
         balance: newBalance,
+        gameResult: { outcome: result, successBet: successBet },
+        gameState: GAME_STATES.Completed,
+        netGain,
+      };
+    }),
+  resetBets: () =>
+    set(() => {
+      return {
         bets: {},
+        gameState: GAME_STATES.BeforeStart,
+        gameResult: { outcome: null, successBet: null },
         totalBetAmount: INITIAL_BET_AMOUNT,
-        computerBet: null,
-        result,
+        netGain: 0,
       };
     }),
 }));

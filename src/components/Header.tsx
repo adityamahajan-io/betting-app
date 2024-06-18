@@ -2,11 +2,9 @@ import React from "react";
 import { useGameStore } from "../store/index";
 import { useTranslation } from "react-i18next";
 
-type Props = {};
-
-const Header = (props: Props) => {
+const Header = () => {
   const { t } = useTranslation();
-  const { balance, totalBetAmount } = useGameStore();
+  const { balance, totalBetAmount, netGain } = useGameStore();
   return (
     <div className="bg-neutral-900 py-2">
       <div className="flex gap-x-4 justify-center">
@@ -20,7 +18,7 @@ const Header = (props: Props) => {
         </span>
         <span>
           <span className="font-bold text-yellow-400">{t("win")}:</span>{" "}
-          <span className="font-bold text-white">{0}</span>
+          <span className="font-bold text-white">{netGain}</span>
         </span>
       </div>
     </div>
