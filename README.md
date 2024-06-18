@@ -1,46 +1,41 @@
-# Getting Started with Create React App
+# Betting Game Assignment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is my submission for the betting game assignment, created using React and TypeScript
 
-## Available Scripts
+You can find the game deployed at: https://betting-game-rock-paper-scissor.netlify.app/
 
-In the project directory, you can run:
+## Architecture Features
 
-### `npm start`
+**Modular Design**: The game features a modular architecture that allows easy customization of gameplay mechanics with minimal changes to specific files.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Global State Management**: Used Zustand for global state management to maintain a single of truth across the application, eliminating prop drilling.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**Responsive Design**: The game is designed to be fully responsive, ensuring a seamless experience on all screen sizes.
 
-### `npm test`
+**Localization Support**: Implemented translations to render text dynamically, enhancing flexibility and localization capabilities.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Folder Structure**: Organized components, utilities, higher-order components (HOCs), and constants into logical directories for improved maintainability.
 
-### `npm run build`
+**Styling with Tailwind CSS**: Utilized Tailwind CSS and `classnames` for conditional styling, providing a cleaner approach to adding dynamic class names.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Additional Points
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Custom memoization function**: In my interview we had discussed about the implementation of a memoization function without using react `useMemo`. Inspired from that, I created a custom memoization function to optimize performance by caching the game results based on hashed arguments, reducing redundant computations.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Enhanced User Interaction**: Added a feature to adjust bet amounts up or down, enhancing user control and interaction within the game.
 
-### `npm run eject`
+**Customizable Configuration**: Centralized game configuration in constants/common and global `store` enabling easy adjustments to gameplay rules and aspects of UI elements such as their colours.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Reusable HOC for Disabled Clicks**: Created a `withDisabledClicks` higher-order component to disable clicks conditionally, enhancing usability during gameplay.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Followed Git best practices**: A proper branch structure has been followed, creating feature branches like `ui-interactivity`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## UX Considerations:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**Dynamic Betting**: Players can place or reduce bets based on current game state and balance.
 
-## Learn More
+**Interactive UI Elements**: Buttons are dynamically enabled/disabled based on game state to guide user actions appropriately.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Post-Game Interaction**: After completing a game round, players can easily restart with the "Play Again" button, maintaining their balance.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Error Handling**: Implemented toastr notifications to alert users of incorrect actions, such as placing bets on all the positions at the same time.
