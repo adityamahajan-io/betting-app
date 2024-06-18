@@ -1,6 +1,7 @@
 # Betting Game Assignment
 
-Live deployment: https://betting-game-rock-paper-scissor.netlify.app/
+**Live deployment**:
+https://betting-game-rock-paper-scissor.netlify.app/
 
 ## Architecture Features
 
@@ -18,7 +19,7 @@ Live deployment: https://betting-game-rock-paper-scissor.netlify.app/
 
 ## Additional Points
 
-**Custom memoization function**: In my interview we had discussed about the implementation of a memoization function without using react `useMemo`. Inspired from that, I created a custom memoization function to optimize performance by caching the game results based on hashed arguments, reducing redundant computations.
+**Custom memoization function**: Created a custom memoization function to optimize performance by caching the game results based on hashed arguments, reducing redundant computations.
 
 **Enhanced User Interaction**: Added a feature to adjust bet amounts up or down, enhancing user control and interaction within the game.
 
