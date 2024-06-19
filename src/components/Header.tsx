@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const { t } = useTranslation();
-  const { balance, totalBetAmount, netGain } = useGameStore();
+  const balance = useGameStore((state) => state.balance);
+  const totalBetAmount = useGameStore((state) => state.totalBetAmount);
+  const netGain = useGameStore((state) => state.netGain);
+
   return (
     <div className="bg-neutral-900 py-2">
       <div className="flex gap-x-4 justify-center">

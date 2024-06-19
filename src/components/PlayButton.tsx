@@ -8,9 +8,12 @@ type Props = {
 };
 
 const PlayButton = ({ setShowGameResult }: Props) => {
+  const initializeGame = useGameStore((state) => state.initializeGame);
+  const resetBets = useGameStore((state) => state.resetBets);
+  const totalBetAmount = useGameStore((state) => state.totalBetAmount);
+  const gameState = useGameStore((state) => state.gameState);
+
   const { t } = useTranslation();
-  const { initializeGame, resetBets, totalBetAmount, gameState } =
-    useGameStore();
 
   const handlePlayButtonClick = () => {
     if (gameState === GAME_STATES.BeforeStart) {

@@ -1,7 +1,11 @@
 import classNames from "classnames";
 import React from "react";
 import { useGameStore } from "../store";
-import { GAME_STATES, MAX_BETTING_POSITIONS } from "../constants";
+import {
+  GAME_STATES,
+  MAX_BETTING_POSITIONS,
+  MINIMUM_BALANCE_ALLOWED,
+} from "../constants";
 import { ChevronUp, ChevronDown } from "react-feather";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
@@ -23,8 +27,12 @@ const BetCard = ({
   id,
   showToast,
 }: Props) => {
-  const { placeBet, reduceBet, bets, balance, gameResult, gameState } =
-    useGameStore();
+  const gameState = useGameStore((state) => state.gameState);
+  const gameResult = useGameStore((state) => state.gameResult);
+  const placeBet = useGameStore((state) => state.placeBet);
+  const reduceBet = useGameStore((state) => state.reduceBet);
+  const bets = useGameStore((state) => state.bets);
+  const balance = useGameStore((state) => state.balance);
 
   const { t } = useTranslation();
 
@@ -32,7 +40,7 @@ const BetCard = ({
 
   const handlePlaceBet = () => {
     const positionsPicked = Object.keys(bets);
-    if (balance <= 0) {
+    if (balance <= MINIMUM_BALANCE_ALLOWED) {
       showToast(t("insufficientBalance"));
       return;
     }

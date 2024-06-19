@@ -10,7 +10,10 @@ import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
 const GameResult = () => {
-  const { gameResult, netGain, gameState } = useGameStore();
+  const gameResult = useGameStore((state) => state.gameResult);
+  const netGain = useGameStore((state) => state.netGain);
+  const gameState = useGameStore((state) => state.gameState);
+
   const { t } = useTranslation();
 
   const renderOutcomeText = () => {

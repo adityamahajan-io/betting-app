@@ -12,7 +12,8 @@ type Props = {
 };
 
 const GamePlaySection = ({ showGameResult, setShowGameResult }: Props) => {
-  const { gameState, bets } = useGameStore();
+  const gameState = useGameStore((state) => state.gameState);
+  const bets = useGameStore((state) => state.bets);
   const { t } = useTranslation();
 
   const playerBets = Object.keys(bets);

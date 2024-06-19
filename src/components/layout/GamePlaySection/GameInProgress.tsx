@@ -13,7 +13,7 @@ const GamePlay = ({ playerBets }: Props) => {
 
   const { t } = useTranslation();
 
-  const { computerBet } = useGameStore();
+  const computerBet = useGameStore((state) => state.computerBet);
 
   useEffect(() => {
     setTimeout(() => setShowComputerBet(true), 600);

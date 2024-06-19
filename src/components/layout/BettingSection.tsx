@@ -8,7 +8,7 @@ import GamePlaySection from "./GamePlaySection";
 
 const BettingSection = () => {
   const [showGameResult, setShowGameResult] = useState(false);
-  const { gameState } = useGameStore();
+  const gameState = useGameStore((state) => state.gameState);
 
   return (
     <div className="flex-grow flex flex-col items-center justify-center">

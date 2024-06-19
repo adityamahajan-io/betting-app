@@ -60,6 +60,7 @@ export const MAX_BETTING_POSITIONS = 2;
 export const INITIAL_BET_AMOUNT = 0;
 export const SINGLE_BET_WIN_MULTIPLIER = 14;
 export const DOUBLE_BET_WIN_MULTIPLER = 3;
+export const MINIMUM_BALANCE_ALLOWED = 0;
 
 export const WINNING_CONDITIONS: Record<GAME_CHOICES, GAME_CHOICES> = {
   [GAME_CHOICES.Rock]: GAME_CHOICES.Scissor,
