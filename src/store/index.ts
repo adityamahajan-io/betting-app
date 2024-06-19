@@ -9,7 +9,7 @@ import {
   SINGLE_BET_WIN_MULTIPLIER,
   STARTING_BALANCE,
 } from "../constants";
-import { getBetResult, getRandomPosition } from "../components/utils/common";
+import { getBetResult, getRandomPosition } from "../utils/common";
 
 export interface Bet {
   [id: string]: number;
@@ -71,11 +71,17 @@ export const useGameStore = create<GameState>((set) => ({
       };
     }),
   initializeGame: () =>
-    set(() => {
-      return {
+    set((state) => {
+      const newState = {
         gameState: GAME_STATES.InProgress,
         computerBet: getRandomPosition(),
       };
+
+      setTimeout(() => {
+        state.playGame();
+      }, 1500);
+
+      return newState;
     }),
   playGame: () =>
     set((state) => {

@@ -9,13 +9,13 @@ type Props = {
 
 const PlayButton = ({ setShowGameResult }: Props) => {
   const { t } = useTranslation();
-  const { initializeGame, resetBets, playGame, totalBetAmount, gameState } =
+  const { initializeGame, resetBets, totalBetAmount, gameState } =
     useGameStore();
 
   const handlePlayButtonClick = () => {
     if (gameState === GAME_STATES.BeforeStart) {
       initializeGame();
-      setTimeout(playGame, 1500);
+      return;
     }
 
     if (gameState === GAME_STATES.Completed) {

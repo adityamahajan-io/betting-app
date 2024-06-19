@@ -1,8 +1,4 @@
-import {
-  GAME_CHOICES,
-  GAME_RESULTS,
-  WINNING_CONDITIONS,
-} from "../../constants";
+import { GAME_CHOICES, GAME_RESULTS, WINNING_CONDITIONS } from "../constants";
 
 function hashCode(s: string): number {
   let hash = 0;

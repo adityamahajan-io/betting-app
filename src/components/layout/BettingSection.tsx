@@ -6,9 +6,7 @@ import { useGameStore } from "../../store";
 import BettingChoices from "./BettingChoices";
 import GamePlaySection from "./GamePlaySection";
 
-type Props = {};
-
-const BettingSection = (props: Props) => {
+const BettingSection = () => {
   const [showGameResult, setShowGameResult] = useState(false);
   const { gameState } = useGameStore();
 
