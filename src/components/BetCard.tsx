@@ -1,11 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { useGameStore } from "../store";
-import {
-  GAME_STATES,
-  MAX_BETTING_POSITIONS,
-  MINIMUM_BALANCE_ALLOWED,
-} from "../constants";
+import { BET_AMOUNT, GAME_STATES, MAX_BETTING_POSITIONS } from "../constants";
 import { ChevronUp, ChevronDown } from "react-feather";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
@@ -40,7 +36,7 @@ const BetCard = ({
 
   const handlePlaceBet = () => {
     const positionsPicked = Object.keys(bets);
-    if (balance <= MINIMUM_BALANCE_ALLOWED) {
+    if (balance < BET_AMOUNT) {
       showToast(t("insufficientBalance"));
       return;
     }
